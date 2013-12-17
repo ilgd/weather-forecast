@@ -1,0 +1,16 @@
+#_*_encoding:cp936_*_
+import urllib
+import re
+ 
+def getHtml(url):#获取网页文件
+    page=urllib.urlopen('http://www.weather.com.cn/shandong/index.shtml')
+    html=page.read()
+    page.close()
+    return html
+def getWeather(html):#过滤得到数据
+    reg='<a title=.*?>(.*?)</a>.*?<span>(.*?)</span>.*?<b>(.*?)</b>'
+    weatherList=re.compile(reg).findall(html)
+    return weatherList
+weatherList=getWeather(getHtml('http://sd.weather.com.cn/weather.shtml'))
+for weather in weatherList:
+    print weather[0].decode('UTF-8').encode('GBK') ,weather[1],weather[2]#解决乱码问题
